@@ -16,6 +16,9 @@
 
 from ...configuration_utils import PretrainedConfig
 from ...utils import logging
+from ...onnx import OnnxConfig
+from collections import OrderedDict
+from typing import Mapping
 
 
 logger = logging.get_logger(__name__)
@@ -149,3 +152,19 @@ class VisualBertConfig(PretrainedConfig):
         self.layer_norm_eps = layer_norm_eps
         self.bypass_transformer = bypass_transformer
         self.special_visual_initialize = special_visual_initialize
+
+
+class VisualBertOnnxConfig(OnnxConfig):
+    @property
+    def inputs(self) -> Mapping[str, Mapping[int, str]]:
+        if self.task == "multiple-choice":
+            dynamic_axis = {0: "batch", 1: "choice", 2: "sequence"}
+        else:
+            dynamic_axis = {0: "batch", 1: "sequence"}
+        return OrderedDict(
+            [
+                ("input_ids", dynamic_axis),
+                ("token_type_ids", dynamic_axis),
+                ("attention_mask", dynamic_axis),
+            ]
+        )

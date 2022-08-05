@@ -51,7 +51,7 @@ def supported_features_mapping(
     *supported_features: str, onnx_config_cls: str = None
 ) -> Dict[str, Callable[[PretrainedConfig], OnnxConfig]]:
     """
-    Generate the mapping between supported the features and their corresponding OnnxConfig for a given model.
+    Generate the mapping between the supported features and their corresponding OnnxConfig for a given model.
 
     Args:
         *supported_features: The names of the supported features.
@@ -434,6 +434,12 @@ class FeaturesManager:
         ),
         "vit": supported_features_mapping(
             "default", "image-classification", "masked-im", onnx_config_cls="models.vit.ViTOnnxConfig"
+        ),
+        "visual-bert": supported_features_mapping(
+            "default",
+            "multiple-choice",
+            "sequence-classification",
+            onnx_config_cls="models.visual_bert.VisualBertOnnxConfig",
         ),
         "xlm": supported_features_mapping(
             "default",
