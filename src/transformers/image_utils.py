@@ -348,7 +348,7 @@ class ImageFeatureExtractionMixin:
         if image.ndim == 3 and image.shape[0] in [1, 3]:
             return (image - mean[:, None, None]) / std[:, None, None]
         else:
-            return (image - mean) / std
+            return (image - mean[:, None, None]) / std[:, None, None]
 
     def resize(self, image, size, resample=None, default_to_square=True, max_size=None):
         """
